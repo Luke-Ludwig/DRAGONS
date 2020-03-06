@@ -629,6 +629,11 @@ class AstroData(object):
         AttributeError
             If the attribute could not be found/computed.
         """
+        if attribute == '_dataprov':
+            if '_dataprov' in self.__dict__:
+                return self._dataprov
+            else:
+                raise AttributeError
         try:
             return getattr(self._dataprov, attribute)
         except AttributeError:
