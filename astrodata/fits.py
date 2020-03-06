@@ -662,6 +662,11 @@ class FitsProvider(DataProvider):
         raise AttributeError("Not found")
 
     def __getattr__(self, attribute):
+        if attribute == '_nddata':
+            if '_nddata' in self.__dict__:
+                return self._nddata
+            else:
+                raise AttributeError
         try:
             return self._getattr_impl(attribute, self._nddata)
         except AttributeError:
