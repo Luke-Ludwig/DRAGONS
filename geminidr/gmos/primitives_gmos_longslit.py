@@ -40,6 +40,7 @@ from . import parameters_gmos_longslit
 # ------------------------------------------------------------------------------
 from ..interactive.fit import fit1d
 from ..interactive.fit.multispline import MultiSplineVisualizer
+from ..interactive.fit.rowspline import RowSplineVisualizer
 from ..interactive.fit.spline import SplineVisualizer
 
 
@@ -593,8 +594,10 @@ class GMOSLongslit(GMOSSpect, GMOSNodAndShuffle):
                 config = self.params[self.myself()]
                 config.update(**params)
 
-                visualizer = MultiSplineVisualizer(all_shapes, all_pixels, all_masked_data, all_orders, all_weights,
-                                                   config=config, recalc_button=True, **spline_kwargs)
+                # visualizer = MultiSplineVisualizer(all_shapes, all_pixels, all_masked_data, all_orders, all_weights,
+                #                                    config=config, recalc_button=True, **spline_kwargs)
+                visualizer = RowSplineVisualizer(all_shapes, all_pixels, all_masked_data, all_orders, all_weights,
+                                                 config=config, recalc_button=True, **spline_kwargs)
                 status = geminidr.interactive.server.interactive_fitter(visualizer)
                 for fitted_data, ext in zip(visualizer.fitted_data(), ad_tiled):
                     ad_fitted.append(fitted_data, header=ext.hdr)

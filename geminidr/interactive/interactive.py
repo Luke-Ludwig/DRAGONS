@@ -180,7 +180,7 @@ class PrimitiveVisualizer(ABC):
 
 
 def build_text_slider(title, value, step, min_value, max_value, obj=None, attr=None, handler=None,
-                      throttled=False):
+                      throttled=False, range_expansion=True):
     """
     Make a slider widget to use in the bokeh interface.
 
@@ -223,19 +223,25 @@ def build_text_slider(title, value, step, min_value, max_value, obj=None, attr=N
     text_input.value = str(value)
     component = row(slider, text_input)
 
-    slider = slider
-    text_input = text_input
+    # slider = slider
+    # text_input = text_input
 
     def _input_check(val):
         # Check if the value is viable as an int or float, according to our type
         if ((not is_float) and isinstance(val, int)) or (is_float and isinstance(val, float)):
-            return True
+            if range_expansion or (start <= val <= end):
+                return True
+            else:
+                return False
         try:
             if is_float:
-                float(val)
+                x = float(val)
             else:
-                int(val)
-            return True
+                x = int(val)
+            if range_expansion or (start <= x <= end):
+                return True
+            else:
+                return False
         except ValueError:
             return False
 
