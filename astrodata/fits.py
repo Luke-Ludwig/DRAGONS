@@ -522,10 +522,9 @@ def read_fits(cls, source, extname_parser=None):
                 # In case WCS info is in the PHU
                 if nd.wcs is None:
                     nd.wcs = adwcs.fitswcs_to_gwcs(hdulist[0].header)
-            ad.append(nd, name=DEFAULT_EXTENSION, reset_ver=False)
+            ad.append(nd, name=DEFAULT_EXTENSION)
         else:
-            nd = ad.append(parts['data'], name=DEFAULT_EXTENSION,
-                           reset_ver=False)
+            nd = ad.append(parts['data'], name=DEFAULT_EXTENSION)
             for item_name in ('mask', 'uncertainty'):
                 item = parts[item_name]
                 if item is not None:
@@ -548,7 +547,7 @@ def read_fits(cls, source, extname_parser=None):
             continue
         name = other.header.get('EXTNAME')
         try:
-            ad.append(other, name=name, reset_ver=False)
+            ad.append(other, name=name)
         except ValueError as e:
             print(f"{e}. Discarding {name}")
 
