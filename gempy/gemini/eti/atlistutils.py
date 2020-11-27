@@ -1,4 +1,3 @@
-
 from gempy.gemini import gemini_tools
 
 from ..utils import logutils
@@ -6,11 +5,11 @@ log = logutils.get_logger(__name__)
 
 class AtListUtils:
 
-	def __init__(self):
-		log.debug("AtListUtils __init__")
+    def __init__(self):
+        log.debug("AtListUtils __init__")
 
-	def prepare_adinput(self, adinput, prefix, diskinlist, taskname):
-		for ad in adinput:
+    def prepare_adinput(self, adinput, prefix, diskinlist, taskname):
+        for ad in adinput:
             ad = gemini_tools.obsmode_add(ad)
             origname = ad.filename
             ad.update_filename(prefix=prefix, strip=True)
