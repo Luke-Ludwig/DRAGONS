@@ -29,8 +29,8 @@ class AtListUtils:
                       (atlist, taskname))
 
     def remove_files(self, filelist, atlist):
-    	log.debug("AtListUtils remove_files()")
-    	for a_file in filelist:
+        log.debug("AtListUtils remove_files()")
+        for a_file in filelist:
             os.remove(a_file)
             log.fullinfo("%s was deleted from disk" % a_file)
         os.remove(atlist)
