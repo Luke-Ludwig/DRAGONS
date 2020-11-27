@@ -76,7 +76,7 @@ class InAtList(GemcombineFile):
 
     def clean(self):
         log.debug("InAtList clean()")
-        super(GemcombineFile, self).clean(self.diskinlist, self.atlist)
+        self._remove_files(self.diskinlist, self.atlist)
 
 class OutFile(GemcombineFile):
     inputs = None

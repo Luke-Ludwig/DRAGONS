@@ -32,8 +32,14 @@ class PyrafETIFile(ETIFile):
     def recover(self):
         log.debug("PyrafETIFile recover(): pass")
 
-    def clean(self, file_list, _at_list):
-        log.debug("PyrafETIFile clean()")
+    def clean(self):
+        log.debug("PyrafETIFile clean(): pass")
+
+    def _remove_files(self, file_list, _at_list):
+        """A common way for subclasses to implement clean, pass in the file_list and _at_list
+        and the corresponding files will be removed from disk
+        """
+        log.debug("PyrafETIFile _remove_files()")
         for a_file in file_list:
             os.remove(a_file)
             log.fullinfo("%s was deleted from disk" % a_file)

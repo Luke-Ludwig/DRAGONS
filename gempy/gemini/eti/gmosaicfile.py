@@ -80,7 +80,7 @@ class InAtList(GmosaicFile):
 
     def clean(self):
         log.debug("InAtList clean()")
-        super(GmosaicFile, self).clean(self.diskinlist, self.atlist)
+        self._remove_files(self.diskinlist, self.atlist)
 
 class OutAtList(GmosaicFile):
     inputs = None
@@ -132,7 +132,7 @@ class OutAtList(GmosaicFile):
 
     def clean(self):
         log.debug("OutAtList clean()")
-        super(GmosaicFile, self).clean(self.diskoutlist, self.atlist)
+        self._remove_files(self.diskoutlist, self.atlist)
 
 
 class LogFile(GmosaicFile):
