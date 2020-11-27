@@ -568,7 +568,7 @@ def circle (**kwargs):
     quarter = int (math.ceil (radius * math.sqrt (0.5)))
     r2 = radius**2
 
-    def _circle_arc_save(_i, _j)
+    def _circle_arc_save(_i, _j):
         if _i >= 0 and _j >= 0 and _i < fbwidth and _j < fbheight:
             _update_save (fd, _i, _j, list_of_points, last_overlay, undo = undo)
             fd.writeData (_i, _j, color)
