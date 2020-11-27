@@ -592,8 +592,6 @@ def circle (**kwargs):
 
     global_save.append (last_overlay)
 
-
-
     # The close() method needs to be called by the calling routine.
     #fd.close()
 
