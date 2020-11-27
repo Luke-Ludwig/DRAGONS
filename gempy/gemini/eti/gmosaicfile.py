@@ -80,11 +80,7 @@ class InAtList(GmosaicFile):
 
     def clean(self):
         log.debug("InAtList clean()")
-        for a_file in self.diskinlist:
-            os.remove(a_file)
-            log.fullinfo("%s was deleted from disk" % a_file)
-        os.remove(self.atlist)
-        log.fullinfo("%s was deleted from disk" % self.atlist)
+        super(GmosaicFile, self).clean(self.diskinlist, self.atlist)
 
 class OutAtList(GmosaicFile):
     inputs = None
@@ -136,11 +132,7 @@ class OutAtList(GmosaicFile):
 
     def clean(self):
         log.debug("OutAtList clean()")
-        for tmpname in self.diskoutlist:
-            os.remove(tmpname)
-            log.fullinfo(tmpname + " was deleted from disk")
-        os.remove(self.atlist)
-        log.fullinfo(self.atlist + " was deleted from disk")
+        super(GmosaicFile, self).clean(self.diskoutlist, self.atlist)
 
 
 class LogFile(GmosaicFile):
