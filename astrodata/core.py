@@ -664,7 +664,7 @@ class AstroData:
         return fixed + tuple(sorted(nd.meta['other'].items()))
 
 
-    def _find_data_type(self, other)
+    def _find_data_type(self, other):
         if hasattr(other, 'dtype'):
             dt = other.dtype.name
         elif hasattr(other, 'data'):
@@ -675,14 +675,14 @@ class AstroData:
             dt = 'unknown'
         return dt
 
-    def _find_dim(self, other)
+    def _find_dim(self, other):
         if hasattr(other, 'dtype'):
             dim = str(other.shape)
         elif hasattr(other, 'data'):
             dim = str(other.data.shape)
         elif hasattr(other, 'array'):
             dim = str(other.array.shape)
-        else
+        else:
             dim = ''
         return dim
 
