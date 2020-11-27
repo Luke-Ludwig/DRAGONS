@@ -625,40 +625,7 @@ class AstroData:
 
     def _pixel_info(self):
         for idx, nd in enumerate(self._nddata):
-            other_objects = []
-            uncer = nd.uncertainty
-            fixed = (('variance', None if uncer is None else uncer),
-                     ('mask', nd.mask))
-            for name, other in fixed + tuple(sorted(nd.meta['other'].items())):
-                if other is None:
-                    continue
-                if isinstance(other, Table):
-                    other_objects.append(dict(
-                        attr=name,
-                        type='Table',
-                        dim=str((len(other), len(other.columns))),
-                        data_type='n/a'
-                    ))
-                else:
-                    dim = ''
-                    if hasattr(other, 'dtype'):
-                        dt = other.dtype.name
-                        dim = str(other.shape)
-                    elif hasattr(other, 'data'):
-                        dt = other.data.dtype.name
-                        dim = str(other.data.shape)
-                    elif hasattr(other, 'array'):
-                        dt = other.array.dtype.name
-                        dim = str(other.array.shape)
-                    else:
-                        dt = 'unknown'
-                    other_objects.append(dict(
-                        attr=name,
-                        type=type(other).__name__,
-                        dim=dim,
-                        data_type=dt
-                    ))
-
+            other_objects = self._build_others(nd)
             yield dict(
                 idx='[{:2}]'.format(idx),
                 main=dict(
@@ -669,6 +636,56 @@ class AstroData:
                 ),
                 other=other_objects
             )
+
+    def _build_others(self, nd):
+        other_objects = []
+        for name, other in self._nd_name_other(nd):
+            if other is None:
+                continue
+            if isinstance(other, Table):
+                other_objects.append(dict(
+                    attr=name,
+                    type='Table',
+                    dim=str((len(other), len(other.columns))),
+                    data_type='n/a'
+                ))
+            else:
+                other_objects.append(dict(
+                    attr=name,
+                    type=type(other).__name__,
+                    dim=self._find_dim(other),
+                    data_type=self._find_data_type(other)
+                ))
+        return other_objects
+
+    def _nd_name_other(self, nd):
+        fixed = (('variance', nd.uncertainty),
+                 ('mask', nd.mask))
+        return fixed + tuple(sorted(nd.meta['other'].items()))
+
+
+    def _find_data_type(self, other):
+        if hasattr(other, 'dtype'):
+            dt = other.dtype.name
+        elif hasattr(other, 'data'):
+            dt = other.data.dtype.name
+        elif hasattr(other, 'array'):
+            dt = other.array.dtype.name
+        else:
+            dt = 'unknown'
+        return dt
+
+    def _find_dim(self, other):
+        if hasattr(other, 'dtype'):
+            dim = str(other.shape)
+        elif hasattr(other, 'data'):
+            dim = str(other.data.shape)
+        elif hasattr(other, 'array'):
+            dim = str(other.array.shape)
+        else:
+            dim = ''
+        return dim
+
 
     def info(self):
         """Prints out information about the contents of this instance."""
