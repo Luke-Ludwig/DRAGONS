@@ -6,6 +6,7 @@ import astrodata
 import gemini_instruments
 from gempy.utils import logutils
 from gempy.eti_core.pyrafetifile import PyrafETIFile
+from gempy.eti_core.atlistutils import AtListUtils
 
 from gempy.gemini import gemini_tools
 
@@ -53,34 +54,17 @@ class InAtList(GemcombineFile):
         log.debug("InAtList __init__")
         GemcombineFile.__init__(self, inputs, params)
         self.atlist = ""
+        self.atlistutils = AtListUtils()
 
     def prepare(self):
         log.debug("InAtList prepare()")
-        for ad in self.adinput:
-            ad = gemini_tools.obsmode_add(ad)
-            origname = ad.filename
-            ad.update_filename(prefix=self.get_prefix(), strip=True)
-            self.diskinlist.append(ad.filename)
-            log.fullinfo("Temporary image (%s) on disk for the IRAF task %s" % \
-                          (ad.filename, self.taskname))
-            ad.write(ad.filename, overwrite=True)
-            ad.filename = origname
-        self.atlist = "tmpImageList" + self.pid_task
-        fhdl = open(self.atlist, "w")
-        for fil in self.diskinlist:
-            fhdl.writelines(fil + "\n")
-        fhdl.close()
-        log.fullinfo("Temporary list (%s) on disk for the IRAF task %s" % \
-                      (self.atlist, self.taskname))
+        self.atlistutils.prepare_adinput(self.adinput, self.get_prefix(), self.diskinlist, self.taskname)
+        self.atlistutils.prepare_atlist(self.atlist, self.pid_task, self.diskinlist, self.taskname)
         self.filedict.update({"input": "@" + self.atlist})
 
     def clean(self):
         log.debug("InAtList clean()")
-        for a_file in self.diskinlist:
-            os.remove(a_file)
-            log.fullinfo("%s was deleted from disk" % a_file)
-        os.remove(self.atlist)
-        log.fullinfo("%s was deleted from disk" % self.atlist)
+        self.atlistutils.remove_files(self.diskinlist, self.atlist)
 
 class OutFile(GemcombineFile):
     inputs = None
