@@ -568,31 +568,31 @@ def circle (**kwargs):
     quarter = int (math.ceil (radius * math.sqrt (0.5)))
     r2 = radius**2
 
+    def _circle_arc_save(_i, _j)
+        if _i >= 0 and _j >= 0 and _i < fbwidth and _j < fbheight:
+            _update_save (fd, _i, _j, list_of_points, last_overlay, undo = undo)
+            fd.writeData (_i, _j, color)
+
+
     for dy in range (-quarter, quarter+1):
         dx = math.sqrt (r2 - dy**2)
         j = int (round (dy + y0))
         i = int (round (x0 - dx))           # left arc
-        if i >= 0 and j >= 0 and i < fbwidth and j < fbheight:
-            _update_save (fd, i, j, list_of_points, last_overlay, undo = undo)
-            fd.writeData (i, j, color)
+        _circle_arc_save(i, j)
         i = int (round (x0 + dx))           # right arc
-        if i >= 0 and j >= 0 and i < fbwidth and j < fbheight:
-            _update_save (fd, i, j, list_of_points, last_overlay, undo = undo)
-            fd.writeData (i, j, color)
+        _circle_arc_save(i, j)
 
     for dx in range (-quarter, quarter+1):
         dy = math.sqrt (r2 - dx**2)
         i = int (round (dx + x0))
         j = int (round (y0 - dy))           # bottom arc
-        if i >= 0 and j >= 0 and i < fbwidth and j < fbheight:
-            _update_save (fd, i, j, list_of_points, last_overlay, undo=undo)
-            fd.writeData (i, j, color)
+        _circle_arc_save(i, j)
         j = int (round (y0 + dy))           # top arc
-        if i >= 0 and j >= 0 and i < fbwidth and j < fbheight:
-            _update_save (fd, i, j, list_of_points, last_overlay, undo=undo)
-            fd.writeData (i, j, color)
+        _circle_arc_save(i, j)
 
     global_save.append (last_overlay)
+
+
 
     # The close() method needs to be called by the calling routine.
     #fd.close()
